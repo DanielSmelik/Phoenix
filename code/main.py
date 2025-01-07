@@ -18,11 +18,14 @@ import time
 class PhoenixRobot():
   #Main class of the Phoenix project. 
   def __init__(self): 
-    pass
+    self.ring_pin = 16
+    self.led_num = 16
 
   def initialize(self):
     print("Staring Phoenix Robot...")
     self.load_settings()
+    self.loading_animation()
+    print("Starting Done...")
 
   def main_loop(self):
     while True:
@@ -34,7 +37,15 @@ class PhoenixRobot():
   def load_settings(self):
     #this func loads setting from json file.  
     pass
+  
+  def loading_animation(self):
+    #this function lights and turns off LEDs on the NeoPixel ring in a Loading Animation. 
+    ring = NeoPixel(Pin(self.ring_pin), self.led_num)
+    ring[5] = [255,255,255]
+    ring.write()
     
+
+
   def on_close(self):
     #this func is the last to run when the robot is turned off. It sends a message and dumps setting into the json.
     pass
