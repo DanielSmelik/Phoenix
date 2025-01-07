@@ -8,17 +8,21 @@ Work on this program began on Jan 7 2025.
 
 #from YuvalsClass import navigaion_func
 #from TamarsClass import search_for_fire, extinguish_fire
-#import LEDS. 
+
+from machine import Pin
+from neopixel import NeoPixel
 import math 
 import json 
 import time 
-
-print("Hello World, from Phoenix!")
 
 class PhoenixRobot():
   #Main class of the Phoenix project. 
   def __init__(self): 
     pass
+
+  def initialize(self):
+    print("Staring Phoenix Robot...")
+    self.load_settings()
 
   def main_loop(self):
     while True:
@@ -30,10 +34,12 @@ class PhoenixRobot():
   def load_settings(self):
     #this func loads setting from json file.  
     pass
+    
   def on_close(self):
     #this func is the last to run when the robot is turned off. It sends a message and dumps setting into the json.
     pass
 
 if __name__ == "__main__":
   phoenix = PhoenixRobot()
+  phoenix.initialize()
   phoenix.main_loop()
