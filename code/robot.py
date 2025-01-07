@@ -1,4 +1,4 @@
-from main import robot
+from main import PhoenixRobot
 
 phoenix = PhoenixRobot()
 phoenix.initialize()
