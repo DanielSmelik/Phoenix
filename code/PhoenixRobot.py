@@ -33,6 +33,7 @@ class PhoenixRobot():
       time.sleep(0.25)
       #navigate(kp, ki, kd)
       #if search_for_fire(): extinguish_fire()
+      time.sleep(0.25)
 
   def load_settings(self):
     #this func loads setting from json file.  
@@ -41,10 +42,18 @@ class PhoenixRobot():
   def loading_animation(self):
     #this function lights and turns off LEDs on the NeoPixel ring in a Loading Animation. 
     ring = NeoPixel(Pin(self.ring_pin), self.led_num)
-    ring[5] = [255,255,255]
-    ring.write()
-    
-
+    for _ in range(2): #do animation 2 times.
+        for i in range (0, self.led_num):
+            ring[i] = [255,255,255]
+            ring[i-1] = [0,0,0]
+            ring.write()
+            time.sleep(0.1)
+    ring[self.led_num-1] = [0,0,0]
+    for i in range(0,self.led_num): #after loading anymation is done, the ring shines in yellow. 
+        ring[i] = [255,204,102]
+        ring.write()    
+        time.sleep(0.05)
+    time.sleep(0.5)
 
   def on_close(self):
     #this func is the last to run when the robot is turned off. It sends a message and dumps setting into the json.
