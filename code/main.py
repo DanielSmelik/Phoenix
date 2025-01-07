@@ -34,6 +34,6 @@ class PhoenixRobot():
     #this func is the last to run when the robot is turned off. It sends a message and dumps setting into the json.
     pass
 
-#if __name__ == "__main__":
-#  phoenix = PhoenixRobot()
-#  phoenix.main_loop()
+if __name__ == "__main__":
+  phoenix = PhoenixRobot()
+  phoenix.main_loop()
