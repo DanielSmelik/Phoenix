@@ -5,13 +5,13 @@ By Daniel Smelik, Gvanim Robotics Lab, 2025.01.08.
 
 import time
 from neopixel import NeoPixel 
-from l298n_motor_driver import motor  
+from l298n_motor_driver import Motor  
 
 class TankDriveVehicle():
   # A Tank Drive Vehicle is a Vehicle with 2 motors, without front wheel steering. This class gets 2 lists, where the first 2 elements are the digital pins and the last is the analog one.  
   def __init__(self, motor1_pins, motor2_pins):
-    self.motorA = motor(motor1_pins[0], motor1_pins[1], motor1_pinds[2])
-    self.motorB = motor(motor2_pins[0], motor2_pins[1], motor2_pinds[2)
+    self.motorA = Motor(motor1_pins[0], motor1_pins[1], motor1_pins[2])
+    self.motorB = Motor(motor2_pins[0], motor2_pins[1], motor2_pins[2])
 
   def go_forward(self, speed):
     self.motorA.run("forward", speed)
@@ -25,5 +25,4 @@ class TankDriveVehicle():
   def go_right(self, speed):
     self.motorA.run("backward", speed)
     self.motorB.run("forward", speed)
-      
-    
+
