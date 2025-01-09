@@ -1,17 +1,14 @@
-"""A "Tank" driving system for vehicles with two motors. By "tank drive," I mean a driving system where,
-to make a turn, the wheels or tracks spin in opposite directions. 
-By Daniel Smelik, Gvanim Robotics Lab, 2025.01.08.
-"""
-
 import time
 from neopixel import NeoPixel 
-from l298n_motor_driver import Motor  
+from PhoenixRobot import PhoenixRobot as Robot
 
-class TankDriveVehicle():
+# Assuming the Robot class is defined elsewhere in your code
+
+class TankDriveVehicle(Robot): # this class is inherited from a "Robot" class. A class that has: self.motorA and self.motorB, which are Motor class objects. 
   # A Tank Drive Vehicle is a Vehicle with 2 motors, without front wheel steering. This class gets 2 lists, where the first 2 elements are the digital pins and the last is the analog one.  
-  def __init__(self, motor1_pins, motor2_pins):
-    self.motorA = Motor(motor1_pins[0], motor1_pins[1], motor1_pins[2])
-    self.motorB = Motor(motor2_pins[0], motor2_pins[1], motor2_pins[2])
+  def super()__init__(self):
+    self.motorA = Robot.motorA # Assuming Robot initializes motorA
+    self.motorB = Robot.motorB # Assuming Robot initializes motorB
 
   def go_forward(self, speed):
     self.motorA.run("forward", speed)
@@ -25,4 +22,3 @@ class TankDriveVehicle():
   def go_right(self, speed):
     self.motorA.run("backward", speed)
     self.motorB.run("forward", speed)
-
