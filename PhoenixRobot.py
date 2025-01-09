@@ -11,6 +11,7 @@ Work on this program began on Jan 7 2025.
 
 from machine import Pin
 from neopixel import NeoPixel
+from l298n_motor_driver import Motor
 import math 
 import json 
 import time 
@@ -20,6 +21,9 @@ class PhoenixRobot():
   def __init__(self): 
     self.ring_pin = 16
     self.led_num = 16
+
+    self.motorA = Motor(5,6,7) # pin numbers are temporary examples.
+    self.motorB = Motor(8,9,10)
 
   def initialize(self):
     print("Staring Phoenix Robot...")
