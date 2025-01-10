@@ -8,8 +8,6 @@ class TankDriveVehicle(Robot): # this class is inherited from a "Robot" class. A
   # A Tank Drive Vehicle is a Vehicle with 2 motors, without front wheel steering. This class gets 2 lists, where the first 2 elements are the digital pins and the last is the analog one.  
   def __init__(self):
     super().__init__()
-    self.motorA = Robot.motorA # Assuming Robot initializes motorA
-    self.motorB = Robot.motorB # Assuming Robot initializes motorB
 
   def go_forward(self, speed):
     self.motorA.run("forward", speed)
