@@ -25,6 +25,9 @@ class PhoenixRobot():
     self.motorA = Motor(5,6,7) # pin numbers are temporary examples.
     self.motorB = Motor(8,9,10)
 
+    self.fan_pinA = 3
+    self.fan_pinB = 4
+
   def initialize(self):
     print("Staring Phoenix Robot...")
     self.load_settings()
