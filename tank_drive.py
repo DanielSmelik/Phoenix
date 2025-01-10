@@ -19,6 +19,6 @@ class TankDriveVehicle(Robot): # this class is inherited from a "Robot" class. A
   def go_right(self, speed):
     self.motorA.run("forward", speed)
     self.motorB.run("backward", speed)
-  def go_right(self, speed):
+  def go_left(self, speed):
     self.motorA.run("backward", speed)
     self.motorB.run("forward", speed)
