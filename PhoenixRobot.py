@@ -12,6 +12,7 @@ Work on this program began on Jan 7 2025.
 from machine import Pin
 from neopixel import NeoPixel
 from l298n_motor_driver import Motor
+from tank_drive import TankDriveVehicle 
 import math 
 import json 
 import time 
@@ -27,6 +28,8 @@ class PhoenixRobot():
 
     self.fan_pinA = 3
     self.fan_pinB = 4
+
+    self.tank_drive = TankDriveVehicle() 
 
   def initialize(self):
     print("Staring Phoenix Robot...")
