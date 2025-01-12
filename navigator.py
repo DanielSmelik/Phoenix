@@ -1,14 +1,23 @@
+"""
+This code was written by Yuval Rachman, with help from Daniel Smelik. 
+Work on this file began on Jan 12, 2025. 
+
+"""
+
 import machine 
 from PhoenixRobot import PhoenixRobot as Robot 
-
-class Navigator(Robot):
-  def __init__(self):
-    super().__init__()
-      
-from machine import Pin, I2C
 import time
 from mpu6050 import MPU6050  # Ensure you have the mpu6050.py file in your ESP32 filesystem
 
+class Navigator(Robot):
+  # this class navigates in a maze, using ultrasonic sensor.
+  def __init__(self):
+    super().__init__()
+
+  
+      
+
+""" Gyro sensor code, not in use rn. 
 # Initialize I2C (use appropriate pins for ESP32)
 i2c = I2C(scl=Pin(22), sda=Pin(21))  # ESP32 SCL on GPIO22, SDA on GPIO21
 
@@ -33,3 +42,4 @@ while True:
 
     # Sleep for a bit before taking the next reading
     time.sleep(0.5)
+"""
