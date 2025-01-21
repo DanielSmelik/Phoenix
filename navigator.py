@@ -40,13 +40,15 @@ while True:
     # Sleep for a bit before taking the next reading
     time.sleep(0.5)
 """
-
-
-
 // code for ulrasonic
+
 void setup() {
-  pinMode(trigPin, OUTPUT); 
-  pinMode(echoPin, INPUT);
+  pinMode(2, OUTPUT); 
+  pinMode(15, INPUT);
+  pinMode(4, OUTPUT);
+  pinMode(0, INPUT);
+  pinMode(33, OUTPUT);
+  pinMode(32, INPUT):
   Serial.begin(115200);
 
 }
@@ -59,16 +61,14 @@ int ultra_check(int trigPin, int echoPin){
 
   int duration = pulseIn(echoPin, HIGH);
   int distance = (duration*.0343)/2;
-  return distance 
+  return distance;
 }
 
 void loop() {
  int us_front = ultra_check(2, 15);
- /*
  int us_left = ultra_check(4, 0);
  int us_right = ultra_check(33, 32);
- */
- Serial.println(us_left);
 }
+
 
 
