@@ -48,7 +48,7 @@ void setup() {
   pinMode(4, OUTPUT);
   pinMode(0, INPUT);
   pinMode(33, OUTPUT);
-  pinMode(32, INPUT):
+  pinMode(32, INPUT);
   Serial.begin(115200);
 
 }
