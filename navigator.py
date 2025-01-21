@@ -44,71 +44,31 @@ while True:
 
 
 // code for ulrasonic
-#define trigPin_1 2
-#define echoPin_1 15
-#define trigPin_2 4
-#define echoPin_2 0
-#define trigPin_3 33
-#define echoPin_3 32
-
 void setup() {
-  pinMode(trigPin_1, OUTPUT); 
-  pinMode(echoPin_1, INPUT);
-  pinMode(trigPin_2, OUTPUT); 
-  pinMode(echoPin_2, INPUT);
-  pinMode(trigPin_3, OUTPUT); 
-  pinMode(echoPin_3, INPUT);
+  pinMode(trigPin, OUTPUT); 
+  pinMode(echoPin, INPUT);
   Serial.begin(115200);
 
 }
-void ultra_front(){
-  digitalWrite(trigPin_1, LOW);
+int ultra_check(int trigPin, int echoPin){
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
-  digitalWrite(trigPin_1, HIGH);
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin_1, LOW);
+  digitalWrite(trigPin, LOW);
 
-  int duration_1 = pulseIn(echoPin_1, HIGH);
-  int distance_1 = (duration_1*.0343)/2;
+  int duration = pulseIn(echoPin, HIGH);
+  int distance = (duration*.0343)/2;
+  return distance 
 }
-void ultra_right(){
-  digitalWrite(trigPin_2, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin_2, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin_2, LOW);
-
-  int duration_2 = pulseIn(echoPin_2, HIGH);
-  int distance_2 = (duration_2*.0343)/2;
-}
-void ultra_left(){
-  digitalWrite(trigPin_3, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin_3, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin_3, LOW);
-
-  int duration_3 = pulseIn(echoPin_3, HIGH);
-  int distance_3 = (duration_3*.0343)/2;
-}
-
 
 void loop() {
-
-}  
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
+ int us_front = ultra_check(2, 15);
+ /*
+ int us_left = ultra_check(4, 0);
+ int us_right = ultra_check(33, 32);
+ */
+ Serial.println(us_left);
+}
 
 
