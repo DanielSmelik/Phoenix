@@ -14,32 +14,55 @@ class Navigator(Robot):
   def __init__(self):
     super().__init__()'''
 
-""" Gyro sensor code, not in use rn. 
-# Initialize I2C (use appropriate pins for ESP32)
-i2c = I2C(scl=Pin(22), sda=Pin(21))  # ESP32 SCL on GPIO22, SDA on GPIO21
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
 
-# Create an MPU6050 instance
-mpu = MPU6050(i2c)
+Adafruit_MPU6050 mpu;
 
-# Test connection
-if mpu.test_connection():
-    print("MPU6050 connection successful!")
-else:
-    print("MPU6050 connection failed.")
+void setup(void) {
+  Serial.begin(115200);
+  while (!Serial)
+    delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
-# Main loop to read accelerometer and gyroscope data
-while True:
-    # Read accelerometer data (X, Y, Z)
-    accel_data = mpu.get_accel_data()
-    print("Accelerometer: X = {:.2f}, Y = {:.2f}, Z = {:.2f}".format(accel_data['x'], accel_data['y'], accel_data['z']))
+  Serial.println("Adafruit MPU6050 test!");
 
-    # Read gyroscope data (X, Y, Z)
-    gyro_data = mpu.get_gyro_data()
-    print("Gyroscope: X = {:.2f}, Y = {:.2f}, Z = {:.2f}".format(gyro_data['x'], gyro_data['y'], gyro_data['z']))
+  // Try to initialize!
+  if (!mpu.begin()) {
+    Serial.println("Failed to find MPU6050 chip");
+    while (1) {
+      delay(10);
+    }
+  }
+  Serial.println("MPU6050 Found!");
 
-    # Sleep for a bit before taking the next reading
-    time.sleep(0.5)
-"""
+  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+
+  delay(100); // small delay to let things settle
+}
+
+void loop() {
+  degree = gyro();
+  Serial.print(degree);
+  Serial.print("\n");
+}
+
+int gyro(){
+  /* Get new sensor events with the readings */
+  sensors_event_t a, g, temp;
+  mpu.getEvent(&a, &g, &temp);
+
+  /* Print out the X-axis Rotation (Gyroscope X) */
+  Serial.print("Rotation X: ");
+  Serial.print(g.gyro.x);  // Gyroscope data for X-axis
+  Serial.println(" rad/s");
+
+  delay(500); // Delay for half a second before next reading
+  int g.gyro.x = gyro_sensor;
+  return gyro_sensor;
+}
 // code for ulrasonic
 
 void setup() {
