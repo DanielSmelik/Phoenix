@@ -94,7 +94,7 @@ void loop() {
  int us_right = ultra_check(33, 32);
 }
 
-def gyroturn(SP, times){
+void gyroturn(SP, times){
     const int PV;
     const int error;
     for (times):
