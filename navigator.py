@@ -42,7 +42,7 @@ void setup(void) {
 
   delay(100); // small delay to let things settle
 }
-
+'''
 void loop() {
   degree = gyro();
   Serial.print(degree);
@@ -74,7 +74,7 @@ void setup() {
   pinMode(32, INPUT);
   Serial.begin(115200);
 
-}
+}'''
 int ultra_check(int trigPin, int echoPin){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
