@@ -3,7 +3,7 @@ This code was written by Yuval Rachman, with help from Daniel Smelik.
 Work on this file began on Jan 12, 2025. 
 
 """
-
+int kp = 1.5;
 '''import machine 
 from PhoenixRobot import PhoenixRobot as Robot 
 import time
@@ -20,7 +20,7 @@ class Navigator(Robot):
 
 Adafruit_MPU6050 mpu;
 
-void setup(void) {
+'''void setup(void) {
   Serial.begin(115200);
   while (!Serial)
     delay(10); // will pause Zero, Leonardo, etc until serial console opens
@@ -42,7 +42,7 @@ void setup(void) {
 
   delay(100); // small delay to let things settle
 }
-'''
+
 void loop() {
   degree = gyro();
   Serial.print(degree);
@@ -62,7 +62,7 @@ int gyro(){
   delay(500); // Delay for half a second before next reading
   int g.gyro.x = gyro_sensor;
   return gyro_sensor;
-}
+}'''
 // code for ulrasonic
 
 void setup() {
@@ -72,9 +72,10 @@ void setup() {
   pinMode(0, INPUT);
   pinMode(33, OUTPUT);
   pinMode(32, INPUT);
+  speedL = motor_to_left;
+  speedR = motor_to_right;
   Serial.begin(115200);
-
-}'''
+}
 int ultra_check(int trigPin, int echoPin){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -93,5 +94,21 @@ void loop() {
  int us_right = ultra_check(33, 32);
 }
 
-
-
+def gyroturn(SP, times){
+    const int PV;
+    const int error;
+    for (times):
+        PV = gyro_sensor_in5.angle
+        eroor = SP - PV
+        if eroor > 100:
+            eroor = 100
+        if eroor < -100:
+            eroor = -100
+        speedL = eroor
+        speedR = -eroor
+        tank_drive.on(speedL,speedR)
+    print('gyroturn_finished')
+    print('angle =',PV)
+    gyro_sensor_in5.reset()
+    print('gyro has been reseted')
+}
