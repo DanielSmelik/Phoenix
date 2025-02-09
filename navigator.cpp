@@ -86,9 +86,11 @@ int ultra_check(int trigPin, int echoPin){
   int distance = (duration*.0343)/2;
   return distance;
 }
-
-void loop() {
+//just to name it batter for the algorithem
  int us_front = ultra_check(2, 15);
  int us_left = ultra_check(4, 0);
  int us_right = ultra_check(33, 32);
+
+void loop() {
+
 }
