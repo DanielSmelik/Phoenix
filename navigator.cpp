@@ -12,6 +12,7 @@ int kp = 1.5;
 #include <Wire.h>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
+
 Adafruit_MPU6050 mpu;
 
 float angleZ = 0;
