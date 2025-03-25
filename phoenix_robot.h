@@ -2,9 +2,10 @@
 #define SCOUTING_CAR_H
 
 class Phoenix {
-  private: 
-  
+  private:;   
 
+  public: 
+    car 
 
 
 
