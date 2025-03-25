@@ -1,14 +1,14 @@
-#ifndef SCOUTING_CAR_H
-#define SCOUTING_CAR_H
+#ifndef PHOENIX_ROBOT_H
+#define PHOENIX_ROBOT_H
 
-class Phoenix {
-  private:;   
+class Phoenix{
+  private:
+    int  _test_param;
 
-  public: 
-    car 
+  public:
+    Phoenix(int test_param);
+    void begin();
+    void motgo(int speed);
 
-
-
-
-
-}
+};
+#endif 
