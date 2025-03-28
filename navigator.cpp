@@ -1,26 +1,35 @@
-/*
-This code was written by Yuval Rachman, with help from Daniel Smelik. 
-Work on this file began on Jan 12, 2025. 
-
-
-import machine 
-from PhoenixRobot import PhoenixRobot as Robot 
-import time
-from mpu6050 import MPU6050  # Ensure you have the mpu6050.py file in your ESP32 filesystem*/
-
-int kp = 1.5;
+#include "navigator.h" 
+#include "Arduino.h"
 #include <Wire.h>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 
-Adafruit_MPU6050 mpu;
+ Adafruit_MPU6050 mpu;
+  
+  float angleZ = 0;
+  float gyroZoffset = 0;
+  unsigned long lastTime = 0;
 
-float angleZ = 0;
-unsigned long lastTime = 0;
-// Gyroscope calibration offsets
-float gyroZoffset = 0;
+navigator::navigator(int test_param){
+  //_test_param = test_param;
+}
 
-void setup() {
+void calibrateGyro() {
+  int numSamples = 500;
+  float sumZ = 0;
+  Serial.println("Calibrating gyro... DO NOT MOVE SENSOR");
+  delay(1000);
+  for (int i = 0; i < numSamples; i++) {
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
+    sumZ += g.gyro.z;
+    delay(10);
+  }
+  gyroZoffset = sumZ / numSamples;
+  Serial.println("Calibration complete!");
+}
+
+void navigator::begin() {
   Wire.begin();
   Serial.begin(115200);
   while (!Serial);
@@ -43,23 +52,9 @@ void setup() {
   pinMode(33, OUTPUT);
   pinMode(32, INPUT);
 }
-void calibrateGyro() {
-  int numSamples = 500;
-  float sumZ = 0;
-  Serial.println("Calibrating gyro... DO NOT MOVE SENSOR");
-  delay(1000);
-  for (int i = 0; i < numSamples; i++) {
-    sensors_event_t a, g, temp;
-    mpu.getEvent(&a, &g, &temp);
-    sumZ += g.gyro.z;
-    delay(10);
-  }
-  gyroZoffset = sumZ / numSamples;
-  Serial.println("Calibration complete!");
-}
 
-// code for gyro value
-float gyro_value(){
+
+float navigator::gyro_value(){
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
   unsigned long currentTime = millis();
@@ -75,7 +70,6 @@ float gyro_value(){
   return angleZ;
 }
 
-// code for ulrasonic
 int ultra_check(int trigPin, int echoPin){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -87,11 +81,7 @@ int ultra_check(int trigPin, int echoPin){
   int distance = (duration*.0343)/2;
   return distance;
 }
-//just to name it batter for the algorithem
- int us_front = ultra_check(2, 15);
- int us_left = ultra_check(4, 0);
- int us_right = ultra_check(33, 32);
-
-void loop() {
-
-}
+  
+  int us_front = ultra_check(2, 15);
+  int us_left = ultra_check(4, 0);
+  int us_right = ultra_check(33, 32);
