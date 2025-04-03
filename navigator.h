@@ -1,9 +1,9 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
-class navigator{
+class Navigator{
     public:
-    navigator(int test_param);
+    Navigator(int test_param);
     void begin();
     float gyro_value();
     private:
