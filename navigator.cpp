@@ -9,7 +9,10 @@
   float angleZ = 0;
   float gyroZoffset = 0;
   unsigned long lastTime = 0;
-
+  unsigned long previous_time;
+  unsigned long current_time;
+  unsigned long elapsed_time;
+  float rate_error;
 navigator::navigator(int test_param){
   //_test_param = test_param;
 }
@@ -51,6 +54,9 @@ void navigator::begin() {
   pinMode(0, INPUT);
   pinMode(33, OUTPUT);
   pinMode(32, INPUT);
+  previous_time = micros();
+  
+
 }
 
 
@@ -70,18 +76,56 @@ float navigator::gyro_value(){
   return angleZ;
 }
 
-int ultra_check(int trigPin, int echoPin){
+float navigator::ultra_check(int trigPin, int echoPin){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  int duration = pulseIn(echoPin, HIGH);
-  int distance = (duration*.0343)/2;
+  float duration = pulseIn(echoPin, HIGH);
+  float distance = (duration*.0343)/2;
   return distance;
 }
   
+
+void navigator::run(){
   int us_front = ultra_check(2, 15);
   int us_left = ultra_check(4, 0);
-  int us_right = ultra_check(33, 32);
+  int us_right = ultra_check(33, 32);  
+}
+
+void navigator::gyroturn(int sp, int times){
+  int KD = 2;
+  int KP = 4;
+  int KI = 0;
+  float cum_error = 0;
+  float last_error = 0;
+  for (int i = 0; i < times; i++){
+    int pv = gyro_value();
+    int error = sp - pv;
+    current_time = micros();
+    elapsed_time = current_time - previous_time;
+    cum_error += error * elapsed_time;
+    if (elapsed_time == 0){
+      rate_error = 0;  //Avoid division by zero
+    }
+    else{
+      rate_error = (error - last_error) / elapsed_time;
+    }
+    float out = KP * error + KI * cum_error + KD * rate_error;
+    if (out > 100);
+    out = 100;
+    if (out < 100);
+    out = 100;
+  
+
+
+  }
+
+}
+
+
+
+
+
