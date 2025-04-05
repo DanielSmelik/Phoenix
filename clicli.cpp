@@ -30,7 +30,7 @@ clicli::clicli(Phoenix &phoenix):robot(phoenix), number(7) {
 }
 
 void clicli::begin() {
-  Serial.begin(115200);
+  //Serial.begin(9600);
 }
 void clicli::run() {
 
@@ -79,7 +79,6 @@ void clicli::run() {
         Serial.print("Pin "); 
         Serial.print(command[1]);   
         Serial.println(" is SET");   
-        delay(1000);
         break;
        case 'l': // Set port to LOW
         pinMode(command[1],OUTPUT);
@@ -87,7 +86,6 @@ void clicli::run() {
         Serial.print("Pin "); 
         Serial.print(command[1]);   
         Serial.println(" is RESET");   
-        delay(1000);
         break;
        case 'm':
         robot.motgo(command[1]);
@@ -109,7 +107,6 @@ void clicli::run() {
         Serial.print(command[1]);   
         Serial.print(" Value = "); 
         Serial.println(digitalRead(command[1]));   
-        delay(1000);
         break;
 
         case 'e': // analog read
@@ -118,14 +115,11 @@ void clicli::run() {
         Serial.print(command[1]);   
         Serial.print(" Value = "); 
         Serial.println(analogRead(command[1]));   
-        delay(1000);
         break;
        
        message_pos = 0;     //Reset for the next message
       }
-   }
-   delay (60);
-   
+   }   
  } 
 
 }

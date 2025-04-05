@@ -9,6 +9,8 @@ class Phoenix{
     Phoenix(int test_param);
     void begin();
     void motgo(int speed);
+    void run();
+    void test(int i); //was used to test serial. irrelevant rn. 
 
 };
 #endif 
