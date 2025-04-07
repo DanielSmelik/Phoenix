@@ -192,7 +192,9 @@ int navigator::check_us(){
     return "turn_back";
   } else if (us_front > us_right and us_front > us_left) {
     return "front";
-  } else if (us_left > us_right and us_left > us_front) {
-    return "left";
+  } else if (us_right > us_left and us_right > us_front){
+    return "right";    
+  }  else if (us_left > us_right and us_left > us_front){
+    return"left";     
   }
 }
