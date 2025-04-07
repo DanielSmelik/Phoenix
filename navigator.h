@@ -11,7 +11,7 @@ class navigator{
     void gyroturn(int sp, int times);
     void reset_gyro();
     void steer(int ang);
-    float check_us();
+    int check_us();
     void go_to_dir();
     private:
     int _trig_1, _trig_2, _trig_3;
