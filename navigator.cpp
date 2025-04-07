@@ -18,7 +18,9 @@ float speedL;
 float speedR;
 float derivative;
 float pv;
-navigator::navigator(int trig_1, int echo_1, int trig_2, int echo_2, int trig_3, int echo_3, int baz_pin) {
+int direction;
+
+navigator::navigator(int trig_1, int echo_1, int trig_2, int echo_2, int trig_3, int echo_3, int baz_pin){
   _trig_1 = trig_1;
   _trig_2 = trig_2;
   _trig_3 = trig_3;
@@ -202,7 +204,22 @@ int navigator::check_us(){
 void navigator::go_to_dir(){
   direction = check_us();
   if (direction == "front"){
-
+    steer(0);
   }
-
+  else if (direction == "right"){
+    gyroturn(90, 350);
+    steer(0);
+  }
+  else if (direction == "left"){
+    gyroturn(-90, 350);
+    steer(0);
+  }
+  else if (direction == "turn_back"){
+    gyroturn(180, 700);
+  }
 }
+
+
+
+
+
