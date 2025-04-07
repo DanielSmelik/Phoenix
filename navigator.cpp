@@ -198,3 +198,11 @@ int navigator::check_us(){
     return"left";     
   }
 }
+
+void navigator::go_to_dir(){
+  direction = check_us();
+  if (direction == "front"){
+
+  }
+
+}
