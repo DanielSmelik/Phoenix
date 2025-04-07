@@ -58,4 +58,4 @@ void Phoenix::readcli() {
             message_pos = 0;  // Reset the position for the next message
         }
     }
-}, 
+}
