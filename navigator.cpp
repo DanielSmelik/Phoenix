@@ -186,3 +186,13 @@ void navigator::steer(int ang) {
   //analogWrite(pin,0);
   Serial.print('angle =', pv);
 }
+
+int navigator::check_us(){
+  if (us_left < 20 and us_front < 20 and us_right < 20) {
+    return "turn_back";
+  } else if (us_front > us_right and us_front > us_left) {
+    return "front";
+  } else if (us_left > us_right and us_left > us_front) {
+    return "left";
+  }
+}
