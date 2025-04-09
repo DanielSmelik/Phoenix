@@ -82,7 +82,7 @@ float navigator::gyro_value() {
   // Apply calibration offsets
   float gyroZ = g.gyro.z - gyroZoffset;
   // Apply a deadband to reduce drift when the sensor is stationary
-  if (fabs(gyroZ) < 0.02) {  // threshold; adjust based on your observations
+  if (fabs(gyroZ) < 0.02) {  
     gyroZ = 0;
   }
   angleZ += gyroZ * dt * (180.0 / PI);
