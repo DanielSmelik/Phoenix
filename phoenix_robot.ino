@@ -1,33 +1,22 @@
-  #include "phoenix_robot.h"
-  #include "navigator.h"
+#include "phoenix_robot.h"
+#include "navigator.h"
 
-  Phoenix robot(1);
-  navigator navigator(1,2,3,4,5,6,7);
+int flamePins[] = {3, 5, 6, 9, 10};  
+Phoenix robot(flamePins,5, 2000);
+navigator navigator(robot, 1,2,3,4,5,6, 7);  
 
-  int i = 0;
+int i = 0;
 
-  void setup() { 
-    Serial.begin(115200);
-    robot.begin();
-    navigator.begin();
-    navigator.go_to_dir();
+void setup() { 
+  robot.begin();
+  /*
+  while !(haishan_koll){
+    Serial.println("Whaiting");
+    delay(500);
   }
+  */ 
+}
 
-  void loop() {
-    //robot.test(i);
-    //i++;
-    /*robot.motgo(100); 
-    delay(3000);
-    robot.motgo(0);
-    delay(3000);
-    */
-    robot.readcli();
-    delay(100);
-    navigator.run();
-    for (int i = 0; i < 100; i++){
-    navigator.go_to_dir();
-    }
+void loop() {
+  robot.readcli();
   }
-
-
-

@@ -3,15 +3,18 @@
 
 class Phoenix{
   private:
-    int  _test_param;
+
+    int* flameSensorPins;
+    const int flameThreshold;
+    const int numFlameSensors; 
 
   public:
-    Phoenix(int test_param);
-    void begin();
-    void motgo(int speed);
+    Phoenix(int _flameSensorPins[], const int _numFlameSensors, const int _flameThreshold);    void begin(); 
+    void motgo(int speedl, int speedr);
     void run();
-    void test(int i); //was used to test serial. irrelevant rn. 
     void readcli();
-
+    void startFlameSensors();
+    void readFlameSensors(int values[]); 
+    bool detectFlame(int values[]); 
 };
 #endif 
