@@ -5,16 +5,13 @@
 const unsigned int MAX_MESSAGE_LENGTH = 64;
 
 
-Phoenix::Phoenix(int* _flameSensorPins, const int _numFlameSensors, const int _flameThreshold ){
-
-  flameSensorPins = new int[_numFlameSensors];
-  
-  for(int i = 0; i < _numFlameSensors; i++) {
-    flameSensorPins[i] = _flameSensorPins[i];
-  } 
-  const int numFlameSensors = _numFlameSensors;
-  const int flameThreshold = _flameThreshold;
+Phoenix::Phoenix(int _test_arg){
+  int test_arg = _test_arg;
 }
+
+int flamePins[] = {3, 5, 6, 9, 10}; 
+const int numFlameSensors = 5;
+const int flameThreshold = 2000;
 
 MotorShield MotorShield(MOTORSHIELD_AD11);
 

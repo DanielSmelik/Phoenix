@@ -3,13 +3,11 @@
 
 class Phoenix{
   private:
-
-    int* flameSensorPins;
-    const int flameThreshold;
-    const int numFlameSensors; 
+    int test_arg;
 
   public:
-    Phoenix(int _flameSensorPins[], const int _numFlameSensors, const int _flameThreshold);    void begin(); 
+    Phoenix(int _test_arg);  
+    void begin(); 
     void motgo(int speedl, int speedr);
     void run();
     void readcli();

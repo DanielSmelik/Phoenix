@@ -56,14 +56,9 @@ void calibrateGyro() {
 }
 
 void navigator::begin() {
-  Wire.begin();
-  while (!Serial)
-    ;
-
   if (!mpu.begin()) {
     Serial.println("Failed to find MPU6050 chip");
-    while (1)
-      ;
+    //while (1);
   }
 
   mpu.setGyroRange(MPU6050_RANGE_250_DEG);
@@ -183,7 +178,7 @@ void navigator::steer(int ang) {
   Serial.print('angle =', pv);
 }
 
-int navigator::check_us(){
+const char* navigator::check_us(){
   if (us_left < 20 and us_front < 20 and us_right < 20) {
     return "turn_back";
   } else if (us_front > us_right and us_front > us_left) {
@@ -196,7 +191,7 @@ int navigator::check_us(){
 }
 
 void navigator::go_to_dir(){
-  direction = check_us();
+  const char* direction = check_us();
   if (direction == "front"){
     steer(0);
   }

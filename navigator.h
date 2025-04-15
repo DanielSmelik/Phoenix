@@ -13,7 +13,7 @@ class navigator{
     void gyroturn(int sp, int times, const float kp, const float ki, const float kd);
     void reset_gyro();
     void steer(int ang);
-    int check_us();
+    const char* check_us();
     void go_to_dir();
     
     private:  
