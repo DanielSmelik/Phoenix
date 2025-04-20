@@ -23,7 +23,7 @@ int us_front;
 int us_left;
 int us_right;
 
-navigator::navigator(Phoenix& _phoenix,int trig_1, int echo_1, int trig_2, int echo_2, int trig_3, int echo_3, int baz_pin): phoenix(_phoenix){
+Navigator::Navigator(Phoenix& _phoenix,int trig_1, int echo_1, int trig_2, int echo_2, int trig_3, int echo_3, int baz_pin): phoenix(_phoenix){
   _trig_1 = trig_1;
   _trig_2 = trig_2;
   _trig_3 = trig_3;
@@ -55,7 +55,7 @@ void calibrateGyro() {
   Serial.println("Calibration complete!");
 }
 
-void navigator::begin() {
+void Navigator::begin() {
   if (!mpu.begin()) {
     Serial.println("Failed to find MPU6050 chip");
     //while (1);
@@ -71,7 +71,7 @@ void navigator::begin() {
 }
 
 
-float navigator::gyro_value() {
+float Navigator::gyro_value() {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
   unsigned long currentTime = millis();
@@ -92,7 +92,7 @@ void navigator::reset_gyro() {
 }
 
 
-float navigator::ultra_check(int trigPin, int echoPin) {
+float Navigator::ultra_check(int trigPin, int echoPin) {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -105,13 +105,13 @@ float navigator::ultra_check(int trigPin, int echoPin) {
 }
 
 
-void navigator::update_us(){
+void Navigator::update_us(){
   us_front = ultra_check(_trig_1, _echo_1);
   us_left = ultra_check(_trig_2, _echo_2);
   us_right = ultra_check(_trig_3, _echo_3);
 }
 
-void navigator::gyroturn(int sp, int times, const float kp, const float ki, const float kd) {
+void Navigator::gyroturn(int sp, int times, const float kp, const float ki, const float kd) {
   float cum_error = 0;
   float last_error = 0;
   for (int i = 0; i < times; i++) {
@@ -141,7 +141,7 @@ void navigator::gyroturn(int sp, int times, const float kp, const float ki, cons
   }
 }
 
-void navigator::steer(int ang) {
+void Navigator::steer(int ang) {
   float kp = 4;
   float ki = 0.1;
   float kd = 2;
@@ -178,7 +178,7 @@ void navigator::steer(int ang) {
   Serial.print('angle =', pv);
 }
 
-const char* navigator::check_us(){
+const char* Navigator::check_us(){
   if (us_left < 20 and us_front < 20 and us_right < 20) {
     return "turn_back";
   } else if (us_front > us_right and us_front > us_left) {
@@ -190,7 +190,7 @@ const char* navigator::check_us(){
   }
 }
 
-void navigator::go_to_dir(){
+void Navigator::go_to_dir(){
   const char* direction = check_us();
   if (direction == "front"){
     steer(0);
