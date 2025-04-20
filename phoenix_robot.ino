@@ -3,7 +3,7 @@
 
  
 Phoenix robot(5);
-navigator navigator(robot, 1,2,3,4,5,6, 7);  
+Navigator navigator(robot, 1,2,3,4,5,6, 7);  
 
 int i = 0;
 
