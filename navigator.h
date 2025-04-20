@@ -3,9 +3,9 @@
 
 #include "phoenix_robot.h" 
 
-class navigator{
+class Navigator{
     public:
-    navigator(Phoenix& _phoenix, int trig_1, int echo_1, int trig_2, int echo_2, int trig_3, int echo_3, int baz_pin);
+    Navigator(Phoenix& _phoenix, int trig_1, int echo_1, int trig_2, int echo_2, int trig_3, int echo_3, int baz_pin);
     void begin();
     float gyro_value();
     float ultra_check(int trigPin, int echoPin);
