@@ -22,12 +22,12 @@ void setup() {
     Serial.println("Waiting for START...");
   }
   Serial.println("Starting!");
-  delay(2000);
+  robot.motgo(400, 400);
 }
 
 void loop() {
-   static bool lastButtonState = HIGH;
-  bool currentButtonState = digitalRead(4);
+  //static bool lastButtonState = HIGH;
+  //bool currentButtonState = digitalRead(4);
 
   robot.readcli();
   /*
@@ -41,6 +41,6 @@ void loop() {
     }
   }
 
-  lastButtonState = currentButtonState;
-  Serial.println(robot.get_anglez());*/
+  lastButtonState = currentButtonState;*/
+  Serial.print(robot.get_anglez()); Serial.print("\t"); Serial.println(robot.get_dir());
 }  

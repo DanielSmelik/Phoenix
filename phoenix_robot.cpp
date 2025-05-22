@@ -128,26 +128,6 @@ int Phoenix::check_us(){
   Serial.print("Left Dist: ");Serial.print(us3.distance()); Serial.println();
 }
 
-/*bool Phoenix::detectFlame(int values[]) {
-    bool flameDetected = false;
-
-    Serial.print("Flame detected by sensor(s): ");
-    for (int i = 0; i < numFlameSensors; i++) {
-        if (values[i] > flameThreshold) {
-            Serial.print(i + 1); // Sensor numbers are 1-based
-            Serial.print(" ");
-            flameDetected = true;
-        }
-    }
-
-    if (flameDetected) {
-        Serial.println(); // Move to the next line
-    } else {
-        Serial.println("None");
-    }
-
-    return flameDetected;
-}*/
 
 char Phoenix::get_dir(){
   if (us1.distance() > length && us2.distance() <= length && us3.distance() <= length){
@@ -205,7 +185,7 @@ void Phoenix::readcli() {
 
       // Execute command
       switch (cmd) {
-        case 'h': // Set pin HIGH
+        /*case 'h': // Set pin HIGH
           pinMode(command[1], OUTPUT);
           digitalWrite(command[1], HIGH);
           Serial.print("Pin "); Serial.print(command[1]); Serial.println(" is SET");
@@ -216,7 +196,7 @@ void Phoenix::readcli() {
           digitalWrite(command[1], LOW);
           Serial.print("Pin "); Serial.print(command[1]); Serial.println(" is RESET");
           break;
-
+        */
         case 'm': //  Both motors control at given speed.
           motgo(command[1], command[1]);
           break;
@@ -230,8 +210,14 @@ void Phoenix::readcli() {
         
         case 'b':
           BrakeAB();
-        
-        case 'd': // Digital read
+          break;
+        case 'g':
+          Serial.print("Current angle (z): "); Serial.println(get_anglez());
+          break;
+        case 'u':
+          Serial.print("Direction is: "); Serial.println(get_dir());
+
+        /*case 'd': // Digital read
           pinMode(command[1], INPUT);
           Serial.print("Pin "); Serial.print(command[1]); Serial.print(" Value = ");
           Serial.println(digitalRead(command[1]));
@@ -248,7 +234,7 @@ void Phoenix::readcli() {
           analogWrite(command[1], command[2]);
           Serial.print("Writing "); Serial.print(command[2]);
           Serial.print(" to pin "); Serial.println(command[1]);
-          break;
+          break;*/
 
         default:
           Serial.println("Unknown command.");
