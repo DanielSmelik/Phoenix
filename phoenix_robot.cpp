@@ -1,39 +1,134 @@
 #include "phoenix_robot.h" 
 #include "Arduino.h"
-#include "WEMOS_Motor.h"
+#include "wms.h"
+#include <Adafruit_NeoPixel.h>
+#include <iarduino_HC_SR04_tmr.h>
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
 
-const unsigned int MAX_MESSAGE_LENGTH = 64;
+#define ring_pin 2
+#define ring_length 12
+
+const unsigned int length = 20; //space from robot to walls.
+const unsigned int MAX_MESSAGE_LENGTH = 64; //max message for cli. 
 
 
-Phoenix::Phoenix(int _test_arg){
-  int test_arg = _test_arg;
+//for gyro 
+float angleZ = 0;
+float gyroZoffset = 0;
+//for angle calculation 
+unsigned long lastTime = 0;
+unsigned long previous_time;
+
+Adafruit_NeoPixel ring(ring_length, ring_pin, NEO_GRB + NEO_KHZ800);
+Adafruit_MPU6050 mpu;
+
+void calibrateGyro() {
+  int numSamples = 500;
+  float sumZ = 0;
+  Serial.println("Calibrating gyro... DO NOT MOVE SENSOR");
+  delay(1000);
+  for (int i = 0; i < numSamples; i++) {
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
+    sumZ += g.gyro.z;
+    delay(10);
+  }
+  gyroZoffset = sumZ / numSamples;
+  Serial.println("Calibration complete!");
 }
 
-int flamePins[] = {3, 5, 6, 9, 10}; 
-const int numFlameSensors = 5;
-const int flameThreshold = 2000;
+Phoenix::Phoenix(int _button_pin){
+  const int button_pin =_button_pin;
+}
 
-MotorShield MotorShield(MOTORSHIELD_AD11);
+//int flamePins[] = {3, 5, 6, 9, 10}; 
+//const int numFlameSensors = 5;
+//const int flameThreshold = 2000;
+
+//first goes the trig pin, then the echo: 
+iarduino_HC_SR04_tmr us1(12,11); // front ultrasonic 
+iarduino_HC_SR04_tmr us2(10,9); //right ultrasonic 
+iarduino_HC_SR04_tmr us3(8,7); //left ultrasonic 
+
 
 void Phoenix::begin(){
-  Serial.begin(9600);
-  delay(500);
+  Serial.begin(115200);
+  pinMode(ring_pin, OUTPUT);
+  pinMode(button_pin, INPUT_PULLUP);
+
+  ring.begin();
+  ring.show();
+  ring.setBrightness(25);
+
+  for (int i =0; i < ring_length; i++){
+    ring.setPixelColor(i, ring.Color(255, 0, 0));
+  }
+  ring.show();
   
   Serial.print("\n");
   Serial.println("Phoenix Robot started...");
-  MotorShield.begin();
   delay(1000);
+  while (WMS_Begin(MOTORSHIELD_AD11, MOTORSHIELD_PWM_RES_9BIT, 3900) != true) {
+      Serial.println("Motor Shield is not reachable");
+      delay(2000);
+  }
   Serial.println("Motors are ON...");
   
-  Serial.println("Flame sensors are ON...");
+   if (!mpu.begin()) {
+    Serial.println("Failed to find MPU6050 chip");
+  }
+
+  mpu.setGyroRange(MPU6050_RANGE_250_DEG);
+  mpu.setAccelerometerRange(MPU6050_RANGE_2_G);
+  mpu.setFilterBandwidth(MPU6050_BAND_5_HZ);
+
+  calibrateGyro();
+
+  for (int i =0; i < ring_length; i++){
+    ring.setPixelColor(i, ring.Color(0, 255, 0));
+  }
+  us1.begin(100);
+  us2.begin(100);
+  us3.begin(100);
+  ring.show();
   }
 
 void Phoenix::motgo(int speedl, int speedr){
+  DriveAB(speedl, speedr);  
   Serial.print("Motors set at speed: "); Serial.print('\t'); Serial.print(speedl); Serial.print('\t'); Serial.println(speedr);
-  MotorShield.drive(speedl, speedr);  
+
 }
 
-bool Phoenix::detectFlame(int values[]) {
+void Phoenix::motbrake(){
+  BrakeAB();
+}
+
+float Phoenix::get_anglez() {
+  sensors_event_t a, g, temp;
+  mpu.getEvent(&a, &g, &temp);
+  unsigned long currentTime = millis();
+  float dt = (currentTime - lastTime) / 1000.0;
+  lastTime = currentTime;
+  // Apply calibration offsets
+  float gyroZ = g.gyro.z - gyroZoffset;
+  // Apply a deadband to reduce drift when the sensor is stationary
+  if (fabs(gyroZ) < 0.02) {  
+    gyroZ = 0;
+  }
+  angleZ += gyroZ * dt * (180.0 / PI);
+  return angleZ;
+}
+
+void Phoenix::blinkRing(){}
+
+int Phoenix::check_us(){
+  Serial.print("Front Dist: ");Serial.print(us1.distance()); Serial.print("\t");
+  Serial.print("Right Dist: ");Serial.print(us2.distance()); Serial.print("\t");
+  Serial.print("Left Dist: ");Serial.print(us3.distance()); Serial.println();
+}
+
+/*bool Phoenix::detectFlame(int values[]) {
     bool flameDetected = false;
 
     Serial.print("Flame detected by sensor(s): ");
@@ -52,6 +147,22 @@ bool Phoenix::detectFlame(int values[]) {
     }
 
     return flameDetected;
+}*/
+
+char Phoenix::get_dir(){
+  if (us1.distance() > length && us2.distance() <= length && us3.distance() <= length){
+    return 'f';
+  }
+  else if (us1.distance() <= length && us2.distance() > length && us3.distance() <= length){
+    return 'r';
+  }
+  else if (us1.distance() <= length && us2.distance() <= length && us3.distance() > length){
+    return 'l';
+  }
+  else if (us1.distance() <= length && us2.distance() <= length && us3.distance() <= length){
+    return 'b';
+  }
+  else {return 'e';}
 }
 
 void Phoenix::readcli() {
@@ -111,12 +222,15 @@ void Phoenix::readcli() {
           break;
 
         case 'R': //  turn right at speed.
-          motgo(0, command[1]);
+          DriveB(command[1]);
           break;
         case 'L':
-          motgo(command[1], 0);
+          DriveA(command[1]);
           break;
-          
+        
+        case 'b':
+          BrakeAB();
+        
         case 'd': // Digital read
           pinMode(command[1], INPUT);
           Serial.print("Pin "); Serial.print(command[1]); Serial.print(" Value = ");

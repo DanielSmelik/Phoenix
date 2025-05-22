@@ -1,15 +1,14 @@
 #include "phoenix_robot.h"
-#include "navigator.h"
 
- 
-Phoenix robot(5);
-Navigator navigator(robot, 1,2,3,4,5,6, 7);  
 
-int i = 0;
+Phoenix robot(4);
+
+unsigned long lastDebounceTime = 0;
+const unsigned long debounceDelay = 50;
 
 void setup() { 
   robot.begin();
-  navigator.begin();
+  //navigator.begin();
   /*
   while !(haishan_koll){
     Serial.println("Whaiting");
@@ -17,15 +16,31 @@ void setup() {
   }
   
   */ 
+  while (1){
+    if (!digitalRead(4)){break;}
+    delay(50);
+    Serial.println("Waiting for START...");
+  }
+  Serial.println("Starting!");
+  delay(2000);
 }
 
 void loop() {
+   static bool lastButtonState = HIGH;
+  bool currentButtonState = digitalRead(4);
+
   robot.readcli();
   /*
-  navigator.go_to_dir();
-  if (robot.detectFlame(int values[] ???)){
-    robot.stop(); or robor.motgo(0,0);
-    robot.killFlame();
+  if (lastButtonState != currentButtonState) {
+    lastDebounceTime = millis(); // reset the debounce timer
   }
-  */
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (currentButtonState == LOW) { // button is pressed
+      robot.motgo(300, 300);
+    }
   }
+
+  lastButtonState = currentButtonState;
+  Serial.println(robot.get_anglez());*/
+}  

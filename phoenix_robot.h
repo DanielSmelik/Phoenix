@@ -3,16 +3,21 @@
 
 class Phoenix{
   private:
-    int test_arg;
+    const int button_pin;
 
   public:
     Phoenix(int _test_arg);  
     void begin(); 
     void motgo(int speedl, int speedr);
+    void motbrake();
     void run();
     void readcli();
-    void startFlameSensors();
-    void readFlameSensors(int values[]); 
-    bool detectFlame(int values[]); 
+    //void startFlameSensors();
+    //void readFlameSensors(int values[]); 
+    //bool detectFlame(int values[]); 
+    void blinkRing();
+    int check_us();
+    char get_dir();
+    float get_anglez();
 };
 #endif 
