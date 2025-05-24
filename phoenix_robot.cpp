@@ -20,8 +20,22 @@ float gyroZoffset = 0;
 unsigned long lastTime = 0;
 unsigned long previous_time;
 
+//for turning to an angle. 
+unsigned long current_time;
+unsigned long elapsed_time;
+float rate_error;
+float out;
+float speedL;
+float speedR;
+float derivative;
+float pv;
+
 Adafruit_NeoPixel ring(ring_length, ring_pin, NEO_GRB + NEO_KHZ800);
 Adafruit_MPU6050 mpu;
+
+void reset_gyro(){
+  angleZ = 0;  // after turning you want to reset the angle to 0; 
+}
 
 void calibrateGyro() {
   int numSamples = 500;
@@ -40,6 +54,8 @@ void calibrateGyro() {
 
 Phoenix::Phoenix(int _button_pin){
   const int button_pin =_button_pin;
+  pinMode(ring_pin, OUTPUT);
+  pinMode(button_pin, INPUT_PULLUP);
 }
 
 //int flamePins[] = {3, 5, 6, 9, 10}; 
@@ -54,12 +70,11 @@ iarduino_HC_SR04_tmr us3(8,7); //left ultrasonic
 
 void Phoenix::begin(){
   Serial.begin(115200);
-  pinMode(ring_pin, OUTPUT);
-  pinMode(button_pin, INPUT_PULLUP);
+  
 
   ring.begin();
   ring.show();
-  ring.setBrightness(25);
+  ring.setBrightness(35);
 
   for (int i =0; i < ring_length; i++){
     ring.setPixelColor(i, ring.Color(255, 0, 0));
@@ -98,6 +113,64 @@ void Phoenix::motgo(int speedl, int speedr){
   DriveAB(speedl, speedr);  
   Serial.print("Motors set at speed: "); Serial.print('\t'); Serial.print(speedl); Serial.print('\t'); Serial.println(speedr);
 
+}
+
+void Phoenix::steer(int ang, float kp, float ki, float kd, int defspeed){
+  float cum_error = 0;
+  float last_error = 0;
+  pv = get_anglez();
+    float error = ang - pv;
+    current_time = micros();
+    elapsed_time = current_time - previous_time;
+    cum_error += error * elapsed_time;
+    if (elapsed_time == 0) {  // avoid dividing by zero
+      derivative = 0;
+    } else {
+      rate_error = (error - last_error) / elapsed_time;
+    }
+    out = kp * error + ki * cum_error + kd * rate_error;
+    if (out > 20) {
+      out = 20;
+    }
+    else if (out < 20) {
+      out = 20;
+    }
+    speedL = defspeed + out;
+    speedR = defspeed - out;    
+    motgo(speedL, speedR);
+    
+    previous_time = current_time;
+    last_error = error;
+}
+
+void Phoenix::gyroturn(int sp, int times, const float kp, const float ki, const float kd){
+  float cum_error = 0;
+  float last_error = 0;
+  for (int i = 0; i < times; i++) {
+    int pv = get_anglez();
+    int error = sp - pv;
+    current_time = micros();
+    elapsed_time = current_time - previous_time;
+    cum_error += error * elapsed_time;
+    if (elapsed_time == 0) {
+      rate_error = 0;  //Avoid division by zero
+    } else {
+      rate_error = (error - last_error) / elapsed_time;
+    }
+    out = kp * error + ki * cum_error + kd * rate_error;
+    if (out > 512) {
+      out = 512;
+    }
+    if (out < 512) {
+      out = 512;
+    }
+    speedL = out;
+    speedR = -out;
+    motgo(speedL, speedR);    
+    previous_time = current_time;
+    last_error = error;
+    reset_gyro();
+  }
 }
 
 void Phoenix::motbrake(){
@@ -202,10 +275,10 @@ void Phoenix::readcli() {
           break;
 
         case 'R': //  turn right at speed.
-          DriveB(command[1]);
+          motgo(command[1], -command[1]);
           break;
         case 'L':
-          DriveA(command[1]);
+          DriveAB(-command[1], command[1]);
           break;
         
         case 'b':

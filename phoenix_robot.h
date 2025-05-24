@@ -19,5 +19,8 @@ class Phoenix{
     int check_us();
     char get_dir();
     float get_anglez();
+    void steer(int ang, float kp, float ki, float kd, int defspeed);
+    void gyroturn(int sp, int times, const float kp, const float ki, const float kd);
+    
 };
 #endif 

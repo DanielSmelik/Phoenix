@@ -22,25 +22,27 @@ void setup() {
     Serial.println("Waiting for START...");
   }
   Serial.println("Starting!");
-  robot.motgo(400, 400);
 }
 
 void loop() {
-  //static bool lastButtonState = HIGH;
-  //bool currentButtonState = digitalRead(4);
-
   robot.readcli();
   /*
-  if (lastButtonState != currentButtonState) {
-    lastDebounceTime = millis(); // reset the debounce timer
-  }
-
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    if (currentButtonState == LOW) { // button is pressed
-      robot.motgo(300, 300);
-    }
-  }
-
-  lastButtonState = currentButtonState;*/
+  switch(robot.get_dir()){
+    case 'f':
+      robot.steer(0,4, 0.1, 2, 400);
+      break;
+    case 'r':
+      robot.gyroturn(90, 350, 4, 2, 0.1);
+      break;
+    case 'l': 
+      robot.gyroturn(-90, 350, 4, 2, 0.1);
+      break;
+    case 'b':
+      robot.gyroturn(180, 350, 4, 2, 0.1);
+      break;
+    case 'e':
+      robot.motbrake();
+      break;
+  }*/
   Serial.print(robot.get_anglez()); Serial.print("\t"); Serial.println(robot.get_dir());
 }  
