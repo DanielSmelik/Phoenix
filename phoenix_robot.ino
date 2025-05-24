@@ -22,6 +22,17 @@ void setup() {
     Serial.println("Waiting for START...");
   }
   Serial.println("Starting!");
+  robot.motgo(-400, -400);
+  delay(4000);
+  robot.motbrake();
+  delay(2000);
+  robot.motgo(512, -512);
+  delay(4000);
+  robot.motbrake();
+  delay(2000);
+  robot.motgo(-512, 512);
+  delay(4000);
+  robot.motbrake();
 }
 
 void loop() {
