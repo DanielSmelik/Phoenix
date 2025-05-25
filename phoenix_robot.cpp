@@ -161,8 +161,8 @@ void Phoenix::gyroturn(int sp, int times, const float kp, const float ki, const 
     if (out > 512) {
       out = 512;
     }
-    if (out < 512) {
-      out = 512;
+    if (out < -512) {
+      out = -512;
     }
     speedL = out;
     speedR = -out;
