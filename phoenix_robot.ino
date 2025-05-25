@@ -21,18 +21,19 @@ void setup() {
     delay(50);
     Serial.println("Waiting for START...");
   }
+  delay(2500);
   Serial.println("Starting!");
-  robot.motgo(-400, -400);
+  /*robot.motgo(400, 400);
   delay(4000);
   robot.motbrake();
   delay(2000);
-  robot.motgo(512, -512);
+  robot.motgo(512, -512); // turn right 
   delay(4000);
   robot.motbrake();
   delay(2000);
-  robot.motgo(-512, 512);
+  robot.motgo(-512, 512); // turn left 
   delay(4000);
-  robot.motbrake();
+  robot.motbrake();*/
 }
 
 void loop() {
@@ -42,10 +43,10 @@ void loop() {
     case 'f':
       robot.steer(0,4, 0.1, 2, 400);
       break;
-    case 'r':
+    case 'l':
       robot.gyroturn(90, 350, 4, 2, 0.1);
       break;
-    case 'l': 
+    case 'r': 
       robot.gyroturn(-90, 350, 4, 2, 0.1);
       break;
     case 'b':
@@ -55,5 +56,7 @@ void loop() {
       robot.motbrake();
       break;
   }*/
-  Serial.print(robot.get_anglez()); Serial.print("\t"); Serial.println(robot.get_dir());
+  //robot.steer(0 ,4, 0.2, 2, 350);
+  robot.gyroturn(90, 400, 5, 0, 2);
+  //Serial.print(robot.get_anglez()); Serial.print("\t"); Serial.println(robot.get_dir());
 }  

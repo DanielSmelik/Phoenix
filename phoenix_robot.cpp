@@ -119,11 +119,11 @@ void Phoenix::steer(int ang, float kp, float ki, float kd, int defspeed){
   float cum_error = 0;
   float last_error = 0;
   pv = get_anglez();
-    float error = ang - pv;
-    current_time = micros();
-    elapsed_time = current_time - previous_time;
-    cum_error += error * elapsed_time;
-    if (elapsed_time == 0) {  // avoid dividing by zero
+  float error = ang - pv;
+  current_time = micros();
+  elapsed_time = current_time - previous_time;
+  cum_error += error * elapsed_time;
+  if (elapsed_time == 0) {  // avoid dividing by zero
       derivative = 0;
     } else {
       rate_error = (error - last_error) / elapsed_time;
@@ -147,8 +147,9 @@ void Phoenix::gyroturn(int sp, int times, const float kp, const float ki, const 
   float cum_error = 0;
   float last_error = 0;
   for (int i = 0; i < times; i++) {
-    int pv = get_anglez();
-    int error = sp - pv;
+    float pv = get_anglez();
+    float error = sp - pv;
+    Serial.print(pv); Serial.print("\t");Serial.println(error);
     current_time = micros();
     elapsed_time = current_time - previous_time;
     cum_error += error * elapsed_time;
@@ -161,16 +162,18 @@ void Phoenix::gyroturn(int sp, int times, const float kp, const float ki, const 
     if (out > 512) {
       out = 512;
     }
-    if (out < -512) {
+    else if (out < -512) {
       out = -512;
     }
-    speedL = out;
-    speedR = -out;
+    speedL = -out;
+    speedR = +out;
     motgo(speedL, speedR);    
     previous_time = current_time;
     last_error = error;
-    reset_gyro();
-  }
+    }
+  BrakeAB();
+  reset_gyro();
+
 }
 
 void Phoenix::motbrake(){
