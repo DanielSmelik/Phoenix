@@ -38,25 +38,29 @@ void setup() {
 
 void loop() {
   robot.readcli();
-  /*
+  
   switch(robot.get_dir()){
     case 'f':
-      robot.steer(0,4, 0.1, 2, 400);
+      //robot.steer(0,4, 0.1, 2, 400);
       break;
     case 'l':
-      robot.gyroturn(90, 350, 4, 2, 0.1);
+      robot.gyroturn(90, 7000, 5, 4, 5);
+      robot.motbrake();
       break;
     case 'r': 
-      robot.gyroturn(-90, 350, 4, 2, 0.1);
+      robot.gyroturn(-90, 7000, 5, 4, 5);
+      robot.motbrake();
       break;
     case 'b':
-      robot.gyroturn(180, 350, 4, 2, 0.1);
+      robot.gyroturn(180, 7000, 5, 4, 5);
+      robot.motbrake();
       break;
     case 'e':
       robot.motbrake();
       break;
-  }*/
+  }
   //robot.steer(0 ,4, 0.2, 2, 350);
-  robot.gyroturn(90, 400, 5, 0, 2);
+  //robot.gyroturn(90, 7000, 5, 4, 5);
+  //delay(10000);
   //Serial.print(robot.get_anglez()); Serial.print("\t"); Serial.println(robot.get_dir());
 }  

@@ -143,37 +143,47 @@ void Phoenix::steer(int ang, float kp, float ki, float kd, int defspeed){
     last_error = error;
 }
 
-void Phoenix::gyroturn(int sp, int times, const float kp, const float ki, const float kd){
+void Phoenix::gyroturn(int sp, int max_time_ms, const float kp, const float ki, const float kd) {
   float cum_error = 0;
   float last_error = 0;
-  for (int i = 0; i < times; i++) {
+  float out = 0;
+  float rate_error = 0;
+  unsigned long previous_time = micros();
+  unsigned long start_time = millis();
+
+  while (millis() - start_time < max_time_ms) {
     float pv = get_anglez();
     float error = sp - pv;
-    Serial.print(pv); Serial.print("\t");Serial.println(error);
-    current_time = micros();
-    elapsed_time = current_time - previous_time;
+    Serial.print(pv); Serial.print("\t"); Serial.println(error);
+
+    unsigned long current_time = micros();
+    float elapsed_time = (current_time - previous_time) / 1e6;  // seconds
+
     cum_error += error * elapsed_time;
-    if (elapsed_time == 0) {
-      rate_error = 0;  //Avoid division by zero
-    } else {
+
+    // Prevent integral windup
+    float max_cum_error = 1000;
+    cum_error = constrain(cum_error, -max_cum_error, max_cum_error);
+
+    if (elapsed_time > 0) {
       rate_error = (error - last_error) / elapsed_time;
     }
+
     out = kp * error + ki * cum_error + kd * rate_error;
-    if (out > 512) {
-      out = 512;
-    }
-    else if (out < -512) {
-      out = -512;
-    }
+
+    out = constrain(out, -512, 512);
     speedL = -out;
     speedR = +out;
-    motgo(speedL, speedR);    
+    motgo(speedL, speedR);
+
     previous_time = current_time;
     last_error = error;
-    }
+
+    if (abs(error) < 1.0) break;  // stop if close enough
+  }
+
   BrakeAB();
   reset_gyro();
-
 }
 
 void Phoenix::motbrake(){
