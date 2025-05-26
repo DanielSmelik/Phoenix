@@ -198,7 +198,7 @@ float Phoenix::get_anglez() {
   lastTime = currentTime;
   // Apply calibration offsets
   float gyroZ = g.gyro.z - gyroZoffset;
-  // Apply a deadband to reduce drift when the sensor is stationary
+  // A deadband to reduce drift when the sensor is stationary
   if (fabs(gyroZ) < 0.02) {  
     gyroZ = 0;
   }
