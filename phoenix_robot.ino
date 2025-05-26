@@ -41,18 +41,18 @@ void loop() {
   
   switch(robot.get_dir()){
     case 'f':
-      //robot.steer(0,4, 0.1, 2, 400);
+      robot.steer(0,5, 2, 6, 400);
       break;
     case 'l':
-      robot.gyroturn(90, 7000, 5, 4, 5);
+      robot.gyroturn(90, 7000, 5, 4, 7);
       robot.motbrake();
       break;
     case 'r': 
-      robot.gyroturn(-90, 7000, 5, 4, 5);
+      robot.gyroturn(-90, 7000, 5, 4, 7);
       robot.motbrake();
       break;
     case 'b':
-      robot.gyroturn(180, 7000, 5, 4, 5);
+      robot.gyroturn(180, 9000, 5, 4, 7);
       robot.motbrake();
       break;
     case 'e':
